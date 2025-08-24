@@ -1,26 +1,26 @@
 #include "accelerometer.h"
 
-int startAcquisition(void)
+int accel_start_acquisition(void)
 {
     return ACCEL_NOT_IMPLEMENTED_YET;
 }
 
-int stopAcquisition(void)
+int accel_stop_acquisition(void)
 {
     return ACCEL_NOT_IMPLEMENTED_YET;
 }
 
-int accelSetConfig(AccelConfigData *config)
+int acce_accel_set_config(AccelConfigData *config)
 {
     return ACCEL_NOT_IMPLEMENTED_YET;
 }
 
-int gyroSetConfig(GyroConfigData *config)
+int accel_gyro_set_config(GyroConfigData *config)
 {
     return ACCEL_NOT_IMPLEMENTED_YET;
 }
 
-int getData(AccelData *data)
+int accel_get_data(AccelData *data)
 {
     return ACCEL_NOT_IMPLEMENTED_YET;
 }
