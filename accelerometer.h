@@ -2,6 +2,7 @@
 #define ACCELEROMETER_H
 
 #include "ICM_42670_defs.h"
+#include "i2c_emulated.h"
 
 #define ACCEL_ERROR_NONE 0
 
