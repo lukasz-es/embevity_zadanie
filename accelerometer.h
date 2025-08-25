@@ -14,6 +14,9 @@
 #define ACCEL_ERROR_OTHER (ACCEL_ERROR_BASE-3)
 #define ACCEL_NOT_IMPLEMENTED_YET (ACCEL_ERROR_BASE-4)
 
+#define HALF_RANGE_VALUE 32767
+#define SPLIT_POINT 256
+
 typedef struct
 {
     /* Per axis values */
@@ -52,5 +55,6 @@ int accel_accel_set_config(AccelConfigData *config);
 int accel_gyro_set_config(GyroConfigData *config);
 int accel_pwr_mgmt_set_config(PowerMgmtData *config);
 int accel_get_data(AccelData *data);
+float floatFromAccelValues(const unsigned char *array,const float range);
 
 #endif // ACCELEROMETER_H

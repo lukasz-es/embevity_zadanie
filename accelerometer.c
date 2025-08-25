@@ -87,3 +87,13 @@ int accel_get_data(AccelData *data)
 {
     return ACCEL_NOT_IMPLEMENTED_YET;
 }
+
+float floatFromAccelValues(const unsigned char *array,const float range)
+{
+	unsigned int tmp = array[0] * SPLIT_POINT + array[1];
+	
+	float retval = (float)(tmp * range / HALF_RANGE_VALUE);
+	retval -= range;
+	
+	return retval;
+}
