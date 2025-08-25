@@ -35,11 +35,10 @@ void IMUI2C::i2CLoop()
     int rxdatalen;
     unsigned char rxdata[MAX_IPC_TOTAL_SIZE];
 	
-	unsigned char txoptype;
-    int txdatalen;
     unsigned char txdata[MAX_IPC_TOTAL_SIZE];
 	
 	const int registerAddrPos = 0;
+	const int registerValPos = 1;
 
 	while(needToWork)
 	{
@@ -53,8 +52,7 @@ void IMUI2C::i2CLoop()
 				case ICM_42670_GYRO_CONFIG0_REG:
 				case ICM_42670_ACCEL_CONFIG0_REG:
 				case ICM_42670_PWR_MGMT0_REG:
-				case ICM_42670_INT_STATUS_DRDY_REG:
-					std::cout << "Config received \n";
+					std::cout << displayConfigParamsString(rxdata[registerAddrPos], rxdata[registerValPos]) << std::endl;;
 					break;
 			}
 				break;
@@ -66,28 +64,25 @@ void IMUI2C::i2CLoop()
 					case ICM_42670_ACCEL_DATA_REGS:
 					case ICM_42670_GYRO_DATA_REGS:
 					
-					std::copy(std::begin(currentAccelValues), std::end(currentAccelValues), std::begin(txdata));
-					
-					std::cout << "Send accel\n";
-					write_queue_send(QUEUE_IPC_MSG_TYPE_READ, 12, txdata);
-					
-					haveDataToSend=getNextAccelValues();
-					
-					break;
+						std::copy(std::begin(currentAccelValues), std::end(currentAccelValues), std::begin(txdata));
+
+						write_queue_send(QUEUE_IPC_MSG_TYPE_READ, 12, txdata);
+						
+						haveDataToSend=getNextAccelValues();
+						break;
 					
 					case ICM_42670_INT_STATUS_DRDY_REG:
-					std::cout << "Send status\n";
-					if (haveDataToSend)
-					{
-						txdata[0] = 1;
-					}
-					else
-					{
-						txdata[0] = 0;
-						needToWork=false;
-					}
-					write_queue_send(QUEUE_IPC_MSG_TYPE_READ, 1, txdata);
-					break;
+						if (haveDataToSend)
+						{
+							txdata[0] = 1;
+						}
+						else
+						{
+							txdata[0] = 0;
+							needToWork=false;
+						}
+						write_queue_send(QUEUE_IPC_MSG_TYPE_READ, 1, txdata);
+						break;
 					
 					default:
 					break;
@@ -150,3 +145,28 @@ bool IMUI2C::getNextAccelValues()
 	return true;
 }
 
+std::string IMUI2C::displayConfigParamsString(const unsigned char reg, const unsigned char val) const
+{
+	std::string retval;
+	
+	switch (reg)
+	{
+		case ICM_42670_GYRO_CONFIG0_REG:
+		retval.append("Gyro config: ");
+		break;
+		
+		case ICM_42670_ACCEL_CONFIG0_REG:
+		retval.append("Accel config: ");
+		break;
+		
+		case ICM_42670_PWR_MGMT0_REG:
+		retval.append("Power management config: ");
+		break;
+		
+		default:
+			retval.append("Unknown register!");
+		break;
+	}
+	
+	return retval;
+}

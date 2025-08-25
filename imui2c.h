@@ -22,6 +22,7 @@ public:
 private:
 	void floatToAccelValues(unsigned char *array, const float val, const float range) const;
 	bool getNextAccelValues();
+	std::string displayConfigParamsString(const unsigned char reg, const unsigned char val) const;
 	
 	unsigned char currentAccelValues[12];
 
