@@ -18,6 +18,7 @@ extern "C" {
 #define I2C_CREATE_FAILED (I2C_ERROR_BASE-2)
 #define I2C_DESTROY_FAILED (I2C_ERROR_BASE-3)
 #define I2C_NOT_IMPLEMENTED_YET (I2C_ERROR_BASE-4)
+#define I2C_FINISH_SIM (I2C_ERROR_BASE-9)
 
 int i2c_initialize_master(void);
 int i2c_initialize_slave(void);
@@ -28,6 +29,7 @@ int i2c_registers_write(unsigned char registerAddr, unsigned char registersNo, u
 /* IPC queues definitions */
 #define QUEUE_IPC_MSG_TYPE_READ 1
 #define QUEUE_IPC_MSG_TYPE_WRITE 2
+#define QUEUE_IPC_MSG_TYPE_DONE 3
 #define QUEUE_IPC_MSG_TYPE 1
 
 #define QUEUE_ID_FILE "queueidfile"

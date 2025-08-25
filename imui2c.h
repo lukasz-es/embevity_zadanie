@@ -11,9 +11,11 @@ public:
     ~IMUI2C();
     // TODO: Add copy, move constructors, copy and move operators
     
-    void i2CTest();
+    void i2CLoop();
 
 private:
+	int opcnt;
+	bool haveDataToSend;
 
 };
 

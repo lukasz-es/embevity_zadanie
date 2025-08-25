@@ -6,12 +6,53 @@ IPCMessageQueueHandles write_queue_handle, read_queue_handle;
 
 int i2c_registers_read(unsigned char registerAddr, unsigned char registersNo, unsigned char *data)
 {
-    return I2C_NOT_IMPLEMENTED_YET;
+    /* NOTE: I'm skipping device address here as it's only emulation */
+	
+	unsigned char device_data[2];
+	unsigned char optype;
+	int regsRead;
+	
+	device_data[0] = registerAddr;
+	device_data[1] = registersNo;
+	if (write_queue_send(QUEUE_IPC_MSG_TYPE_READ, 2, device_data) != I2C_SUCCESS)
+	{
+		return I2C_WRITE_FAILED;
+	}
+	
+	if (read_queue_receive(&optype, &regsRead, data) != I2C_SUCCESS)
+	{
+		return I2C_READ_FAILED;
+	}
+	
+	if (optype == QUEUE_IPC_MSG_TYPE_DONE)
+	{
+		return I2C_FINISH_SIM;
+	}
+	
+	if (regsRead != registersNo)
+	{
+		return I2C_READ_FAILED;
+	}
+		
+	return I2C_SUCCESS;
 }
 
 int i2c_registers_write(unsigned char registerAddr, unsigned char registersNo, unsigned char *data)
 {
-    return I2C_NOT_IMPLEMENTED_YET;
+	/* NOTE: I'm skipping device address here as it's only emulation */
+	
+	unsigned char device_data[MAX_IPC_TOTAL_SIZE]; /* This could be malloced but IMHO const size version is better */
+	int i;
+	
+	if (registersNo > QUEUE_MAX_IPC_DATA_SIZE)
+	{
+		return I2C_WRITE_FAILED;
+	}
+	
+	device_data[0] = registerAddr;
+	memcpy(&device_data[1], data, registersNo);
+	
+	return write_queue_send(QUEUE_IPC_MSG_TYPE_WRITE, (registersNo+1), device_data);
 }
 
 int i2c_initialize_master(void)
@@ -107,6 +148,13 @@ int read_queue_receive(unsigned char *opType, int *dataLen, unsigned char *data)
     memcpy(data, &msg.data[QUEUE_IPC_PAYLOAD_START_POS], msg.data[QUEUE_IPC_DATA_LEN_POS]);
 
     printf("Received: %d %d %s\n", msg.data[0], msg.data[1], (char *)&msg.data[2]);
+	
+	int i;
+	for (i=0; i<20; i++)
+	{
+		printf("%02X:", msg.data[i+2]);
+	}
+	printf("\n");
 
     return I2C_SUCCESS;
 }

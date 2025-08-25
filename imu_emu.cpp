@@ -6,7 +6,6 @@ using namespace std;
 int main()
 {
     IMUI2C i2c;
-    i2c.i2CTest();
     cout << "Hello World!" << endl;
     return 0;
 }
