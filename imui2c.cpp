@@ -348,5 +348,54 @@ std::string IMUI2C::displayPwrConfigParamsString(const unsigned char val) const
 {
 	std::string retval;
 	
+	unsigned char tmp;
+	
+	//Gyro mode
+	tmp = val & ICM_42670_PWR_MGMT_GYRO_MODE_BITMASK;
+	tmp >>= ICM_42670_PWR_MGMT_GYRO_MODE_BITSHIFT;
+	
+	switch (tmp)
+	{
+		
+		case GYRO_PWR_MODE_OFF:
+			retval.append("Gyro: OFF; ");
+			break;
+			
+		case GYRO_PWR_MODE_STDBY:
+			retval.append("Gyro: Standby; ");
+			break;
+		
+		case GYRO_PWR_MODE_LN:
+			retval.append("Gyro: LN; ");
+			break;
+		
+		default:
+		break;
+	}
+	
+	//Accel mode
+	tmp = val & ICM_42670_PWR_MGMT_ACCEL_MODE_BITMASK;
+	tmp >>= ICM_42670_PWR_MGMT_ACCEL_MODE_BITSHIFT;
+	
+	switch (tmp)
+	{
+		
+		case ACCEL_PWR_MODE_OFF:
+		case ACCEL_PWR_MODE_OFF1:
+			retval.append("Accel: OFF; ");
+			break;
+			
+		case ACCEL_PWR_MODE_LP:
+			retval.append("Accel: LP; ");
+			break;
+		
+		case ACCEL_PWR_MODE_LN:
+			retval.append("Accel: LN; ");
+			break;
+		
+		default:
+		break;
+	}
+	
 	return retval;
 }
