@@ -4,7 +4,7 @@
 #include "ICM_42670_defs.h"
 #include "i2c_emulated.h"
 
-#define ACCEL_ERROR_NONE 0
+#define ACCEL_SUCCESS 0
 
 #define ACCEL_ERROR_BASE -1
 

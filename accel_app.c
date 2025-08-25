@@ -14,6 +14,7 @@ int main()
 	data[1] = 0xBE;
 	i2c_registers_write(0x55, 2, data);
 	//i2c_registers_read(0x55, 6,  data);
+	accel_start_acquisition();
 	
     while ( i2c_registers_read(0xAA, 6,  data) != I2C_FINISH_SIM)
 	{
