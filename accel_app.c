@@ -3,9 +3,9 @@
 
 int main()
 {
-    unsigned char opType=4, rxoptype;
-    int dataLen=20, rxdatalen;
-    unsigned char data[100]="Text from app", rxdata[100];
+    unsigned char rxdata[MAX_IPC_TOTAL_SIZE];
+
+	AccelData data;
 
 	accel_start_acquisition();
 
@@ -20,7 +20,15 @@ int main()
 
 		if (have_data)
 		{
-			i2c_registers_read(ICM_42670_ACCEL_DATA_REGS, 1,  rxdata);
+			i2c_registers_read(ICM_42670_ACCEL_DATA_REGS, 12,  rxdata);
+			data.accel.x = floatFromAccelValues(&rxdata[0], 2.0);
+			data.accel.y = floatFromAccelValues(&rxdata[2], 2.0);
+			data.accel.z = floatFromAccelValues(&rxdata[4], 2.0);
+			data.gyro.x = floatFromAccelValues(&rxdata[6], 2.0);
+			data.gyro.y = floatFromAccelValues(&rxdata[8], 2.0);
+			data.gyro.z = floatFromAccelValues(&rxdata[10], 2.0);
+			
+			printf ("%f %f %f\n", data.accel.x, data.accel.y, data.accel.z);
 		}
 		
 	}
