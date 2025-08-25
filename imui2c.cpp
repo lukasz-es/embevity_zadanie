@@ -257,6 +257,90 @@ std::string IMUI2C::displayAccelConfigParamsString(const unsigned char val) cons
 {
 	std::string retval;
 	
+	unsigned char tmp;
+	
+	//Range
+	tmp = val & ICM_42670_ACCEL_CFG_RANGE_BITMASK;
+	tmp >>= ICM_42670_ACCEL_CFG_RANGE_BITSHIFT;
+	
+	switch (tmp)
+	{
+		
+		case ACCEL_RANGE_16_G:
+			retval.append("Range: 16G; ");
+			break;
+			
+		case ACCEL_RANGE_8_G:
+			retval.append("Range: 8G; ");
+			break;
+		
+		case ACCEL_RANGE_4_G:
+			retval.append("Range: 4G; ");
+			break;
+		
+		case ACCEL_RANGE_2_G:
+			retval.append("Range: 2G; ");
+			break;
+		
+		default:
+		break;
+	}
+	
+	//Frequency
+	tmp = val & ICM_42670_ACCEL_CFG_FREQ_BITMASK;
+	tmp >>= ICM_42670_ACCEL_CFG_FREQ_BITSHIFT;
+	
+	switch (tmp)
+	{
+		
+		case ACCEL_FREQ_1600_HZ:
+			retval.append("Freq: 1600 Hz");
+			break;
+			
+		case ACCEL_FREQ_800_HZ:
+			retval.append("Freq: 800 Hz");
+			break;
+		
+		case ACCEL_FREQ_400_HZ:
+			retval.append("Freq: 400 Hz");
+			break;
+		
+		case ACCEL_FREQ_200_HZ:
+			retval.append("Freq: 200 Hz");
+			break;
+		
+		case ACCEL_FREQ_100_HZ:
+			retval.append("Freq: 100 Hz");
+			break;
+		
+		case ACCEL_FREQ_50_HZ:
+			retval.append("Freq: 50 Hz");
+			break;
+			
+		case ACCEL_FREQ_25_HZ:
+			retval.append("Freq: 25 Hz");
+			break;
+			
+		case ACCEL_FREQ_12_5_HZ:
+			retval.append("Freq: 12.5 Hz");
+			break;
+			
+		case ACCEL_FREQ_6_25_HZ:
+			retval.append("Freq: 6.25 Hz");
+			break;
+			
+		case ACCEL_FREQ_3_125_HZ:
+			retval.append("Freq: 3.125 Hz");
+			break;
+			
+		case ACCEL_FREQ_1_5625_HZ:
+			retval.append("Freq: 1.5625 Hz");
+			break;
+		
+		default:
+		break;
+	}
+	
 	return retval;
 }
 
