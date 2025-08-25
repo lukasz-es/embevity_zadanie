@@ -40,10 +40,17 @@ typedef struct
     ICM_42670_AccelFreq freq;
 } AccelConfigData;
 
+typedef struct
+{
+	ICM_42670_PwrMgmt_GyroMode gyro;
+	ICM_42670_PwrMgmt_AccelMode accel;
+} PowerMgmtData;
+
 int accel_start_acquisition(void);
 int accel_stop_acquisition(void);
-int acce_accel_set_config(AccelConfigData *config);
+int accel_accel_set_config(AccelConfigData *config);
 int accel_gyro_set_config(GyroConfigData *config);
+int accel_pwr_mgmt_set_config(PowerMgmtData *config);
 int accel_get_data(AccelData *data);
 
 #endif // ACCELEROMETER_H
