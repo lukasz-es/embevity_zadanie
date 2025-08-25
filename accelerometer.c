@@ -14,6 +14,8 @@ int accel_start_acquisition(void)
 	pwr_config.gyro = GYRO_PWR_MODE_LN;
 	pwr_config.accel = ACCEL_PWR_MODE_LN;
 	
+	i2c_initialize_master();
+	
 	if (accel_accel_set_config(&accel_config) != I2C_SUCCESS)
 	{
 		return ACCEL_ERROR_I2C_FAIL;
@@ -34,7 +36,8 @@ int accel_start_acquisition(void)
 
 int accel_stop_acquisition(void)
 {
-    return ACCEL_NOT_IMPLEMENTED_YET;
+    i2c_close();
+	return ACCEL_SUCCESS;
 }
 
 int accel_accel_set_config(AccelConfigData *config)

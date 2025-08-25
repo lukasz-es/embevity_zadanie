@@ -3,7 +3,6 @@
 
 int main()
 {
-    i2c_initialize_master();
     unsigned char opType=4, rxoptype;
     int dataLen=20, rxdatalen;
     unsigned char data[100]="Text from app", rxdata[100];
@@ -16,11 +15,12 @@ int main()
 	//i2c_registers_read(0x55, 6,  data);
 	accel_start_acquisition();
 	
-    while ( i2c_registers_read(0xAA, 6,  data) != I2C_FINISH_SIM)
+    while ( i2c_registers_read(ICM_42670_INT_STATUS_DRDY_REG, 1,  data) != I2C_FINISH_SIM)
 	{
-		;
+		printf("%X", data[0]);
 	}
-    i2c_close();
+	
+	accel_stop_acquisition();
     printf("Hello World!\n");
     return 0;
 }
