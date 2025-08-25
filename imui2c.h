@@ -16,6 +16,7 @@ public:
     void i2CLoop();
 
 private:
+	void floatToAccelValues(unsigned char *array, const float val, const float range) const;
 	
 	std::vector<unsigned char> pollData;
 

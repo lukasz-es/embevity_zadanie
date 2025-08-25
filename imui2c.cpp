@@ -5,6 +5,9 @@ IMUI2C::IMUI2C()
 {
     opcnt=8;
 	haveDataToSend=true;
+	unsigned char tempArray[2];
+	float val;
+
 	i2c_initialize_slave();
 }
 
@@ -82,3 +85,15 @@ void IMUI2C::i2CLoop()
 		}
 	}
 }
+
+void IMUI2C::floatToAccelValues(unsigned char *array, const float val, const float range) const
+{
+	const unsigned int halfRangeValue = 32767;
+	const unsigned int splitPoint = 256;
+	unsigned int tmp = (unsigned int)(( (val / range) + 1 ) * halfRangeValue);
+	
+	// Byte order is: MSB LSB
+	array[0] = tmp / splitPoint;
+	array[1] = tmp % splitPoint;
+}
+
