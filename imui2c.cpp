@@ -3,10 +3,18 @@
 
 IMUI2C::IMUI2C()
 {
-    opcnt=8;
-	haveDataToSend=true;
-	unsigned char tempArray[2];
-	float val;
+	const std::string testFileName = "2023-01-16-15-33-09-imu.csv";
+	
+	std::string line;
+	
+	testVals.open(testFileName);
+	
+	if (testVals.is_open())
+	{
+		// skip header
+		std::getline(testVals, line);
+		haveDataToSend=getNextAccelValues();
+	}
 
 	i2c_initialize_slave();
 }
@@ -14,6 +22,11 @@ IMUI2C::IMUI2C()
 IMUI2C::~IMUI2C()
 {
     i2c_close();
+	
+	if (testVals.is_open())
+	{
+		testVals.close();
+	}
 }
 
 void IMUI2C::i2CLoop()
@@ -52,12 +65,14 @@ void IMUI2C::i2CLoop()
 				{
 					case ICM_42670_ACCEL_DATA_REGS:
 					case ICM_42670_GYRO_DATA_REGS:
+					
+					std::copy(std::begin(currentAccelValues), std::end(currentAccelValues), std::begin(txdata));
+					
 					std::cout << "Send accel\n";
-					if (--opcnt <= 0)
-					{
-						haveDataToSend = false;
-					}
-					write_queue_send(QUEUE_IPC_MSG_TYPE_READ, 17, (unsigned char *)"Text from second");
+					write_queue_send(QUEUE_IPC_MSG_TYPE_READ, 12, txdata);
+					
+					haveDataToSend=getNextAccelValues();
+					
 					break;
 					
 					case ICM_42670_INT_STATUS_DRDY_REG:
@@ -95,5 +110,43 @@ void IMUI2C::floatToAccelValues(unsigned char *array, const float val, const flo
 	// Byte order is: MSB LSB
 	array[0] = tmp / splitPoint;
 	array[1] = tmp % splitPoint;
+}
+
+bool IMUI2C::getNextAccelValues()
+{
+	std::string line, part;
+	std::string delimiter = ",";
+	float tmp;
+	
+	int valueIndex=0;
+	
+	if (!std::getline(testVals, line))
+	{
+		testVals.close();
+		return false;
+	}
+	
+	// split line into parts separated by comma
+	auto pos = line.find(delimiter);
+	while (pos != std::string::npos)
+	{
+		part = line.substr(0, pos);
+		line.erase(0, pos + delimiter.length());
+		pos = line.find(delimiter);
+		
+		tmp = std::stof(part);
+		// TODO: I'm basically ignoring gyroscope vslues; their range is different and it should be addressed
+		// TODO: Refactor magic numbers
+		floatToAccelValues(&currentAccelValues[valueIndex], tmp, 2.0);
+		if (valueIndex < 8)
+		{
+			valueIndex += 2;
+		}
+	}
+	//Last part remains in input string
+	part = line;
+	floatToAccelValues(&currentAccelValues[valueIndex], tmp, 2.0);
+	
+	return true;
 }
 

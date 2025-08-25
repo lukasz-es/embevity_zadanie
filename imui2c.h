@@ -3,8 +3,12 @@
 
 #include "i2c_emulated.h"
 #include "ICM_42670_defs.h"
-#include <vector>
+#include <fstream>
 #include <iostream>
+#include <string>
+#include <bits/stdc++.h>
+#include <algorithm>
+#include <iterator>
 
 class IMUI2C
 {
@@ -17,12 +21,14 @@ public:
 
 private:
 	void floatToAccelValues(unsigned char *array, const float val, const float range) const;
+	bool getNextAccelValues();
 	
-	std::vector<unsigned char> pollData;
+	unsigned char currentAccelValues[12];
 
-	int opcnt;
-	bool haveDataToSend;
+	bool haveDataToSend=false;
 	bool needToWork = true;
+	
+	std::ifstream testVals;
 
 };
 
