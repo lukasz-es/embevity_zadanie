@@ -4,10 +4,16 @@
 #include "freefall.h"
 #include "argshelper.h"
 
-int main()
+int main(int argc, char **argv)
 {
 	AccelData data;
 	FreeFallDataCache cache;
+	
+	int min_count = 5;
+	float threshold = 0.1;
+	
+	/* Deal with command line arguments */
+	parseArgs(argc, argv, &min_count, &threshold);
 	
 	int freefall_reported = 0;
 	int samples_counter = 0;
