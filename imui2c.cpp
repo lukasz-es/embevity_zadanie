@@ -153,20 +153,116 @@ std::string IMUI2C::displayConfigParamsString(const unsigned char reg, const uns
 	{
 		case ICM_42670_GYRO_CONFIG0_REG:
 		retval.append("Gyro config: ");
+		retval.append(displayGyroConfigParamsString(val));
 		break;
 		
 		case ICM_42670_ACCEL_CONFIG0_REG:
 		retval.append("Accel config: ");
+		retval.append(displayAccelConfigParamsString(val));
 		break;
 		
 		case ICM_42670_PWR_MGMT0_REG:
 		retval.append("Power management config: ");
+		retval.append(displayPwrConfigParamsString(val));
 		break;
 		
 		default:
-			retval.append("Unknown register!");
+			retval.append("Unknown register configured!");
 		break;
 	}
+	
+	return retval;
+}
+
+std::string IMUI2C::displayGyroConfigParamsString(const unsigned char val) const
+{
+	std::string retval;
+	
+	unsigned char tmp;
+	
+	//Range
+	tmp = val & ICM_42670_GYRO_CFG_RANGE_BITMASK;
+	tmp >>= ICM_42670_GYRO_CFG_RANGE_BITSHIFT;
+	
+	switch (tmp)
+	{
+		
+		case GYRO_RANGE_2000_DPS:
+			retval.append("Range: 2000 DPS; ");
+			break;
+			
+		case GYRO_RANGE_1000_DPS:
+			retval.append("Range: 1000 DPS; ");
+			break;
+		
+		case GYRO_RANGE_500_DPS:
+			retval.append("Range: 500 DPS; ");
+			break;
+		
+		case GYRO_RANGE_250_DPS:
+			retval.append("Range: 250 DPS; ");
+			break;
+		
+		default:
+		break;
+	}
+	
+	//Frequency
+	tmp = val & ICM_42670_GYRO_CFG_FREQ_BITMASK;
+	tmp >>= ICM_42670_GYRO_CFG_FREQ_BITSHIFT;
+	
+	switch (tmp)
+	{
+		
+		case GYRO_FREQ_1600_HZ:
+			retval.append("Freq: 1600 Hz");
+			break;
+			
+		case GYRO_FREQ_800_HZ:
+			retval.append("Freq: 800 Hz");
+			break;
+		
+		case GYRO_FREQ_400_HZ:
+			retval.append("Freq: 400 Hz");
+			break;
+		
+		case GYRO_FREQ_200_HZ:
+			retval.append("Freq: 200 Hz");
+			break;
+		
+		case GYRO_FREQ_100_HZ:
+			retval.append("Freq: 100 Hz");
+			break;
+		
+		case GYRO_FREQ_50_HZ:
+			retval.append("Freq: 50 Hz");
+			break;
+			
+		case GYRO_FREQ_25_HZ:
+			retval.append("Freq: 25 Hz");
+			break;
+			
+		case GYRO_FREQ_12_5_HZ:
+			retval.append("Freq: 12.5 Hz");
+			break;
+		
+		default:
+		break;
+	}
+	
+	return retval;
+}
+
+std::string IMUI2C::displayAccelConfigParamsString(const unsigned char val) const
+{
+	std::string retval;
+	
+	return retval;
+}
+
+std::string IMUI2C::displayPwrConfigParamsString(const unsigned char val) const
+{
+	std::string retval;
 	
 	return retval;
 }
