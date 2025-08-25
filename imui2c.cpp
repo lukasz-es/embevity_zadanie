@@ -5,7 +5,6 @@ IMUI2C::IMUI2C()
     opcnt=5;
 	haveDataToSend=true;
 	i2c_initialize_slave();
-	i2CLoop();
 }
 
 IMUI2C::~IMUI2C()
@@ -19,6 +18,8 @@ void IMUI2C::i2CLoop()
     int rxdatalen;
     unsigned char rxdata[MAX_IPC_TOTAL_SIZE];
 	
+	const int registerAddrPos = 0;
+	
 	while (haveDataToSend)
 	{
 		read_queue_receive(&rxoptype, &rxdatalen, rxdata);
@@ -26,6 +27,23 @@ void IMUI2C::i2CLoop()
 		switch (rxoptype)
 		{
 			case QUEUE_IPC_MSG_TYPE_WRITE:
+			switch(rxdata[registerAddrPos])
+			{
+				case ICM_42670_GYRO_CONFIG0_REG:
+				case ICM_42670_ACCEL_CONFIG0_REG:
+				case ICM_42670_PWR_MGMT0_REG:
+				case ICM_42670_INT_STATUS_DRDY_REG:
+					std::cout << "Config received \n";
+					break;
+					
+					case 0x55:
+					std::cout << "55 config received \n";
+					break;
+				
+				default:
+				nextRegister=rxdata[registerAddrPos];
+					break;
+			}
 				break;
 				
 			case QUEUE_IPC_MSG_TYPE_READ:

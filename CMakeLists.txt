@@ -12,5 +12,5 @@ project(accel_imu_emulator VERSION 1.0 LANGUAGES CXX)
 set (CMAKE_CXX_STANDARD 14)
 
 add_executable(imu_emu imu_emu.cpp)
-add_library (imui2c imui2c.cpp imui2c.h)
+add_library (imui2c imui2c.cpp imui2c.h ICM_42670_defs.h)
 target_link_libraries(imu_emu PRIVATE imui2c i2c_emulated)
