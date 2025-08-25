@@ -15,3 +15,8 @@ set (CMAKE_CXX_STANDARD 14)
 add_executable(imu_emu imu_emu.cpp)
 add_library (imui2c imui2c.cpp imui2c.h ICM_42670_defs.h)
 target_link_libraries(imu_emu PRIVATE imui2c i2c_emulated)
+
+project(freefall_ut VERSION 1.0 LANGUAGES C)
+set (CMAKE_C_STANDARD 99)
+add_executable(freefall_ut freefall_ut.c)
+target_link_libraries(freefall_ut PRIVATE i2c_emulated accelerometer freefall)
