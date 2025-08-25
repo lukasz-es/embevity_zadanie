@@ -85,7 +85,30 @@ int accel_pwr_mgmt_set_config(PowerMgmtData *config)
 
 int accel_get_data(AccelData *data)
 {
-    return ACCEL_NOT_IMPLEMENTED_YET;
+	/* TODO: Refactor magic values */
+	
+	unsigned char rxdata[MAX_IPC_TOTAL_SIZE];
+	
+	i2c_registers_read(ICM_42670_INT_STATUS_DRDY_REG, 1,  rxdata);
+
+	char have_data = (rxdata[0] & ICM_42670_INT_STATUS_DRDY_BITMASK);
+
+	if (have_data)
+	{
+		i2c_registers_read(ICM_42670_ACCEL_DATA_REGS, 12,  rxdata);
+		data->accel.x = floatFromAccelValues(&rxdata[0], 2.0);
+		data->accel.y = floatFromAccelValues(&rxdata[2], 2.0);
+		data->accel.z = floatFromAccelValues(&rxdata[4], 2.0);
+		data->gyro.x = floatFromAccelValues(&rxdata[6], 2.0);
+		data->gyro.y = floatFromAccelValues(&rxdata[8], 2.0);
+		data->gyro.z = floatFromAccelValues(&rxdata[10], 2.0);
+	}
+	else
+	{
+		return ACCEL_ERROR_OTHER;
+	}
+	
+	return ACCEL_SUCCESS;
 }
 
 float floatFromAccelValues(const unsigned char *array, const float range)
