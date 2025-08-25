@@ -55,6 +55,6 @@ int accel_accel_set_config(AccelConfigData *config);
 int accel_gyro_set_config(GyroConfigData *config);
 int accel_pwr_mgmt_set_config(PowerMgmtData *config);
 int accel_get_data(AccelData *data);
-float floatFromAccelValues(const unsigned char *array,const float range);
+float floatFromAccelValues(const unsigned char *array, const float range);
 
 #endif // ACCELEROMETER_H
