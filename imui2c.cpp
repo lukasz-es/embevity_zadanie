@@ -1,8 +1,9 @@
 #include "imui2c.h"
+#include <stdio.h>
 
 IMUI2C::IMUI2C()
 {
-    opcnt=5;
+    opcnt=8;
 	haveDataToSend=true;
 	i2c_initialize_slave();
 }
@@ -18,9 +19,13 @@ void IMUI2C::i2CLoop()
     int rxdatalen;
     unsigned char rxdata[MAX_IPC_TOTAL_SIZE];
 	
-	const int registerAddrPos = 0;
+	unsigned char txoptype;
+    int txdatalen;
+    unsigned char txdata[MAX_IPC_TOTAL_SIZE];
 	
-	while (haveDataToSend)
+	const int registerAddrPos = 0;
+
+	while(needToWork)
 	{
 		read_queue_receive(&rxoptype, &rxdatalen, rxdata);
 		
@@ -35,30 +40,41 @@ void IMUI2C::i2CLoop()
 				case ICM_42670_INT_STATUS_DRDY_REG:
 					std::cout << "Config received \n";
 					break;
-					
-					case 0x55:
-					std::cout << "55 config received \n";
-					break;
-				
-				default:
-				nextRegister=rxdata[registerAddrPos];
-					break;
 			}
 				break;
 				
 			case QUEUE_IPC_MSG_TYPE_READ:
-				if (--opcnt <= 0)
+
+				switch(rxdata[0])
 				{
-					haveDataToSend = false;
-				}
-				if (haveDataToSend)
-				{
+					case ICM_42670_ACCEL_DATA_REGS:
+					case ICM_42670_GYRO_DATA_REGS:
+					std::cout << "Send accel\n";
+					if (--opcnt <= 0)
+					{
+						haveDataToSend = false;
+					}
 					write_queue_send(QUEUE_IPC_MSG_TYPE_READ, 17, (unsigned char *)"Text from second");
+					break;
+					
+					case ICM_42670_INT_STATUS_DRDY_REG:
+					std::cout << "Send status\n";
+					if (haveDataToSend)
+					{
+						txdata[0] = 1;
+					}
+					else
+					{
+						txdata[0] = 0;
+						needToWork=false;
+					}
+					write_queue_send(QUEUE_IPC_MSG_TYPE_READ, 1, txdata);
+					break;
+					
+					default:
+					break;
 				}
-				else
-				{
-					write_queue_send(QUEUE_IPC_MSG_TYPE_DONE, 0, rxdata);
-				}
+				
 				break;
 				
 			default:

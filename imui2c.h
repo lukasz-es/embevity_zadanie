@@ -21,7 +21,7 @@ private:
 
 	int opcnt;
 	bool haveDataToSend;
-	unsigned char nextRegister;
+	bool needToWork = true;
 
 };
 

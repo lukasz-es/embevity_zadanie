@@ -1,7 +1,5 @@
 #include "i2c_emulated.h"
 
-#include <stdio.h>
-
 IPCMessageQueueHandles write_queue_handle, read_queue_handle;
 
 int i2c_registers_read(unsigned char registerAddr, unsigned char registersNo, unsigned char *data)
@@ -146,15 +144,6 @@ int read_queue_receive(unsigned char *opType, int *dataLen, unsigned char *data)
     *opType=msg.data[QUEUE_IPC_OP_TYPE_POS];
     *dataLen=msg.data[QUEUE_IPC_DATA_LEN_POS];
     memcpy(data, &msg.data[QUEUE_IPC_PAYLOAD_START_POS], msg.data[QUEUE_IPC_DATA_LEN_POS]);
-
-    printf("Received: %d %d %s\n", msg.data[0], msg.data[1], (char *)&msg.data[2]);
-	
-	int i;
-	for (i=0; i<20; i++)
-	{
-		printf("%02X:", msg.data[i+2]);
-	}
-	printf("\n");
 
     return I2C_SUCCESS;
 }
