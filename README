@@ -1,0 +1,29 @@
+Emulation of free fall detection system based on I2C accelerometer. Done as Embevity hire process assignment.
+
+Requirements:
+CMake (3.10 or later) and GCC (any recent version should do). Other compilers might work as well but they haven't been tested.
+Tested on Linux (Lubuntu 24.04 LTS).
+Program uses IPC message queues so it may have issues building and/or running on Windows.
+
+How to build:
+In this file's directory, issue two commands:
+cmake .
+cmake --build .
+
+Unit tests:
+Free fall detection module has its own test suite. It's built alongside other components.
+To run tests: execute freefall_ut binary.
+
+How to run:
+1. Run the I2C accelerometer emulator: imu_emu
+2. Run the detection app: accel_app
+
+Parameters:
+accel_app has two optional parameters:
+-t - detection threshold, as floating-point value in G units; default: 0.1
+-n - minimum number of samples to announce fall condition; default: 5 , range 2 to 64
+
+example: ./accel_app -t 0.4 -n 21
+
+There is also built-in help available (./accel_app -h).
+
