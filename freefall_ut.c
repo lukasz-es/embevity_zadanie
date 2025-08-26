@@ -152,11 +152,57 @@ UTEST(freefall, erratic)
 		retval = freefall_check(&cache, &data);
 		ASSERT_EQ(0, retval);
 	}
+}
+
+/* Test with minimum 63 matching samples required */
+UTEST(freefall, large_samples_no_63) 
+{
+	int retval, i;
 	
+	freefall_init(&cache, 63, 1.0);
+
+	data.accel.x = 0.5;
+	data.accel.y = 0.5;
+	data.accel.z = 0.5;
+	
+	for (i=0; i<62; i++)
+	{
+		retval = freefall_check(&cache, &data);
+		ASSERT_EQ(0, retval);
+	}
+	
+	for (i=0; i<5; i++)
+	{
+		retval = freefall_check(&cache, &data);
+		ASSERT_EQ(1, retval);
+	}
+}
+
+/* Test with minimum 64 matching samples required */
+UTEST(freefall, large_samples_no_64) 
+{
+	int retval, i;
+	
+	freefall_init(&cache, 64, 1.0);
+
+	data.accel.x = 0.5;
+	data.accel.y = 0.5;
+	data.accel.z = 0.5;
+	
+	for (i=0; i<63; i++)
+	{
+		retval = freefall_check(&cache, &data);
+		ASSERT_EQ(0, retval);
+	}
+	
+	for (i=0; i<5; i++)
+	{
+		retval = freefall_check(&cache, &data);
+		ASSERT_EQ(1, retval);
+	}
 }
 
 int main(int argc, const char *const argv[])
 {
-	
   return utest_main(argc, argv);
 }
