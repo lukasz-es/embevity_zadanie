@@ -29,6 +29,23 @@ IMUI2C::~IMUI2C()
 	}
 }
 
+IMUI2C::IMUI2C(IMUI2C &other)
+{
+	std::swap(testVals, other.testVals);
+	std::swap(currentAccelValues, other.currentAccelValues);
+	haveDataToSend = other.haveDataToSend;
+	needToWork = other.needToWork;
+}
+
+IMUI2C IMUI2C::operator=(IMUI2C other)
+{
+	std::swap(testVals, other.testVals);
+	std::swap(currentAccelValues, other.currentAccelValues);
+	haveDataToSend = other.haveDataToSend;
+	needToWork = other.needToWork;
+	return *this;
+}
+
 void IMUI2C::i2CLoop()
 {
     unsigned char rxoptype;

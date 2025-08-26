@@ -15,7 +15,8 @@ class IMUI2C
 public:
     IMUI2C();
     ~IMUI2C();
-    // TODO: Add copy, move constructors, copy and move operators
+    IMUI2C(IMUI2C &other);
+	IMUI2C operator=(IMUI2C other);
     
     void i2CLoop();
 
