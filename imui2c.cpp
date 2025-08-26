@@ -131,9 +131,8 @@ bool IMUI2C::getNextAccelValues()
 	float tmp;
 	
 	int valueIndex=0;
-    const float testAccelRange = 2.0;
-	const int valueSize = 2;
-	const int valuesInRow = 6;
+	
+	const float testAccelRange = 2.0;
 	// Max index is 1 size less than usual due to splitting mechanism
 	const int maxValueIndex = (valuesInRow - 2) * valueSize;
 	

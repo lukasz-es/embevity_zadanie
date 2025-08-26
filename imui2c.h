@@ -21,6 +21,11 @@ public:
     void i2CLoop();
 
 private:
+
+	const int valueSize = 2;
+	const int valuesInRow = 6;
+	const int maxValuesRowSize = valuesInRow * valueSize;
+
 	void floatToAccelValues(unsigned char *array, const float val, const float range) const;
 	bool getNextAccelValues();
 	std::string displayConfigParamsString(const unsigned char reg, const unsigned char val) const;
@@ -28,11 +33,9 @@ private:
 	std::string displayAccelConfigParamsString(const unsigned char val) const;
 	std::string displayPwrConfigParamsString(const unsigned char val) const;
 	
-	unsigned char currentAccelValues[12];
-
+	unsigned char currentAccelValues[maxValuesRowSize];
 	bool haveDataToSend=false;
 	bool needToWork = true;
-	
 	std::ifstream testVals;
 
 };
