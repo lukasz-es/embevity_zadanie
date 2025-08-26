@@ -114,6 +114,11 @@ bool IMUI2C::getNextAccelValues()
 	float tmp;
 	
 	int valueIndex=0;
+    const float testAccelRange = 2.0;
+	const int valueSize = 2;
+	const int valuesInRow = 6;
+	// Max index is 1 size less than usual due to splitting mechanism
+	const int maxValueIndex = (valuesInRow - 2) * valueSize;
 	
 	if (!std::getline(testVals, line))
 	{
@@ -131,16 +136,17 @@ bool IMUI2C::getNextAccelValues()
 		
 		tmp = std::stof(part);
 		// TODO: I'm basically ignoring gyroscope vslues; their range is different and it should be addressed
-		// TODO: Refactor magic numbers
-		floatToAccelValues(&currentAccelValues[valueIndex], tmp, 2.0);
-		if (valueIndex < 8)
+		// TODO: Use real device config received
+		
+		floatToAccelValues(&currentAccelValues[valueIndex], tmp, testAccelRange);
+		if (valueIndex < maxValueIndex)
 		{
-			valueIndex += 2;
+			valueIndex += valueSize;
 		}
 	}
 	//Last part remains in input string
 	part = line;
-	floatToAccelValues(&currentAccelValues[valueIndex], tmp, 2.0);
+	floatToAccelValues(&currentAccelValues[valueIndex], tmp, testAccelRange);
 	
 	return true;
 }
