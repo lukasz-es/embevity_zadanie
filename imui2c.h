@@ -22,9 +22,9 @@ public:
 
 private:
 
-	const int valueSize = 2;
-	const int valuesInRow = 6;
-	const int maxValuesRowSize = valuesInRow * valueSize;
+	const static int valueSize = 2;
+	const static int valuesInRow = 6;
+	const static int maxValuesRowSize = valuesInRow * valueSize;
 
 	void floatToAccelValues(unsigned char *array, const float val, const float range) const;
 	bool getNextAccelValues();
